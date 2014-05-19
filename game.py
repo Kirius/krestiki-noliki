@@ -15,6 +15,7 @@ def memo(f):
 
     return _f
 
+
 class GiveUp(BaseException):
     pass
 
@@ -200,8 +201,8 @@ def minimax_strategy(board, mark, *args):
             return 0
         else:
             f = max if max_player else min
-            return  f(utility(board.copy().move(x, y, mark), next_mark[mark], not max_player)
-                      for x, y in board.get_all_moves())
+            return f(utility(board.copy().move(x, y, mark), next_mark[mark], not max_player)
+                     for x, y in board.get_all_moves())
 
     def move_utility(coord):
         return utility(board.copy().move(*coord, mark=mark), next_mark[mark], False)
