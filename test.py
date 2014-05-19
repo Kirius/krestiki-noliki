@@ -1,7 +1,8 @@
 # coding=utf-8
 import unittest
-import sys, os
-from game import Board, Game, random_strategy
+import sys
+import os
+from game import Board, Game, random_strategy, minimax_strategy
 
 
 class BoardTest(unittest.TestCase):
@@ -87,7 +88,7 @@ class GameTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.stdout = sys.stdout
-        null = open(os.devnull,'wb')
+        null = open(os.devnull, 'wb')
         sys.stdout = null
 
     def test_random_strategies_3x3_board(self):
@@ -112,6 +113,26 @@ class GameTest(unittest.TestCase):
                 game.play()
         except BaseException:
             self.fail("There was an error when 2 random strategies played on 6x6 board!")
+
+    def test_random_vs_minimax(self):
+        try:
+            results = [0, 0, 0]
+            for _ in range(20):
+                game = Game(random_strategy, minimax_strategy, 3)
+                res = game.play()
+                results[res] += 1
+        except BaseException:
+            self.fail("There was an error when random played vs minimax!")
+        # random can't win
+        self.assertEqual(results[1], 0)
+
+    def test_minimax_vs_minimax(self):
+        try:
+            game = Game(minimax_strategy, minimax_strategy, 3)
+            # must be a draw
+            self.assertEqual(game.play(), 0)
+        except BaseException:
+            self.fail("There was an error when minimax played vs minimax!")
 
     @classmethod
     def tearDownClass(cls):
